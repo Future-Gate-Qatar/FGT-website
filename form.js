@@ -52,47 +52,95 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     submitBtn.textContent = 'Submitting...';
 
     const form = e.target;
+    const formData = new FormData();
 
-    // Build JSON payload from form fields (skip files)
-    const data = {
-        access_key: '98a0e564-0085-4474-ab7c-a1f7999a2c14',
-        subject: 'New Supplier Registration Form Submission',
-        from_name: 'FGT Supplier Registration'
+    // Web3Forms config
+    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
+    formData.append('subject', 'New Supplier Registration - FGT');
+    formData.append('from_name', 'FGT Supplier Registration');
+
+    // Corporate Info (Page 1)
+    const fields = {
+        'Company Name': 'company_name',
+        'P.O. Box': 'po_box',
+        'Phone': 'phone',
+        'Email': 'email',
+        'Website': 'web',
+        'Address Line 1': 'address1',
+        'Address Line 2': 'address2',
+        'City': 'city',
+        'State/Province': 'state',
+        'Country': 'country',
+        'Owner Name': 'owner_name',
+        'Mobile': 'mobile',
+        'Contact Person': 'contact_person',
+        'Title': 'title',
+        'Contact Phone': 'contact_phone',
+        'Contact Email': 'contact_email',
+        // Bank Details (Page 3)
+        'Bank Name': 'bank_name',
+        'Bank Address': 'bank_address',
+        'Branch': 'bank_branch',
+        'Account Name': 'account_name',
+        'Account Number': 'account_number',
+        'Account Currency': 'account_currency',
+        'SWIFT/BIC Code': 'swift_code',
+        'IBAN': 'iban',
+        'Bank Contact Phone': 'bank_contact_phone',
+        'Finance Email': 'finance_email',
+        // Registration Documents (Page 4)
+        'CR No': 'cr_no',
+        'CR Expiry Date': 'cr_expiry',
+        'EID No': 'eid_no',
+        'EID Expiry Date': 'eid_expiry',
+        'Tax Card No': 'tax_no',
+        'Tax Card Expiry Date': 'tax_expiry',
+        'Commercial License': 'license_no',
+        'License Expiry Date': 'license_expiry',
+        // Submission (Page 6)
+        'Submission Date': 'submission_date',
+        'Submission Time': 'submission_time'
     };
 
-    // Collect all text/select/date/email/tel inputs
-    const inputs = form.querySelectorAll('input:not([type="file"]):not([type="checkbox"]):not([type="hidden"]), select, textarea');
-    inputs.forEach(input => {
-        if (input.name && input.value) {
-            data[input.name] = input.value;
+    for (const [label, name] of Object.entries(fields)) {
+        const input = form.querySelector(`[name="${name}"]`);
+        if (input && input.value) {
+            formData.append(label, input.value);
         }
-    });
+    }
 
-    // Collect checkboxes
-    const checked = form.querySelectorAll('input[type="checkbox"]:checked');
-    const products = [];
-    checked.forEach(cb => {
-        if (cb.name === 'products[]') products.push(cb.value);
-    });
-    if (products.length > 0) data['Products/Services'] = products.join(', ');
+    // Products (Page 2)
+    const checked = form.querySelectorAll('input[name="products[]"]:checked');
+    if (checked.length > 0) {
+        formData.append('Products/Services', Array.from(checked).map(c => c.value).join(', '));
+    }
+    const otherProducts = form.querySelector('[name="products_other"]');
+    if (otherProducts && otherProducts.value) {
+        formData.append('Other Products', otherProducts.value);
+    }
 
-    // Collect file names
-    const fileInputs = form.querySelectorAll('input[type="file"]');
-    const fileNames = [];
-    fileInputs.forEach(input => {
-        if (input.files.length > 0) {
-            fileNames.push(input.files[0].name);
+    // File attachments (Page 5) - combine into single attachment field
+    const fileMap = {
+        'cr_file': 'CR',
+        'eid_file': 'EID',
+        'license_file': 'Commercial License',
+        'tax_file': 'Tax Card',
+        'bank_file': 'Bank Details',
+        'qid_file': 'QID Copy'
+    };
+    for (const [name, label] of Object.entries(fileMap)) {
+        const input = form.querySelector(`[name="${name}"]`);
+        if (input && input.files.length > 0) {
+            formData.append(label, input.files[0]);
         }
-    });
-    if (fileNames.length > 0) data['Uploaded Documents'] = fileNames.join(', ');
+    }
 
-    data['Signature'] = 'Signed digitally';
+    formData.append('Signature', 'Signed digitally');
 
     try {
         const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: formData
         });
 
         const result = await response.json();
