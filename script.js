@@ -56,18 +56,19 @@ cookieDecline.addEventListener('click', () => {
     cookieOverlay.style.display = 'none';
 });
 
-// Clients Vertical Slider — show one at a time
-const clientLogos = document.querySelectorAll('.client-logo');
-let visibleClient = 0;
+// Clients Horizontal Slider — 5 at a time, right to left
+const clientTrack = document.getElementById('clientsTrack');
+const clientLogos = clientTrack.children;
+const totalClients = clientLogos.length;
+let clientOffset = 0;
 
-function showClient(index) {
-    clientLogos.forEach(l => l.classList.remove('visible'));
-    clientLogos[index].classList.add('visible');
+function slideClients() {
+    clientOffset++;
+    if (clientOffset > totalClients - 5) {
+        clientOffset = 0;
+    }
+    const logoWidth = clientLogos[0].offsetWidth + 25; // width + gap
+    clientTrack.style.transform = `translateX(-${clientOffset * logoWidth}px)`;
 }
 
-showClient(0);
-
-setInterval(() => {
-    visibleClient = (visibleClient + 1) % clientLogos.length;
-    showClient(visibleClient);
-}, 2500);
+setInterval(slideClients, 2500);
