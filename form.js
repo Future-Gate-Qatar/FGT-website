@@ -139,29 +139,25 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
         console.log('Web3Forms response:', result);
 
         if (result.success) {
-            // Send files as a second request if any exist
+            // Send files via Formsubmit.co (supports attachments natively)
             if (uploadedFiles.length > 0) {
                 const fileData = new FormData();
-                fileData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
-                fileData.append('subject', 'Attachments - ' + (getVal('company_name') || 'Supplier Registration'));
-                fileData.append('from_name', 'FGT Supplier Registration');
-                fileData.append('message', 'Document attachments for ' + getVal('company_name') + ' (' + getVal('email') + ')');
-                uploadedFiles.slice(0, 3).forEach(f => {
-                    fileData.append('attachment', f.file);
+                fileData.append('_subject', 'Document Attachments - ' + getVal('company_name'));
+                fileData.append('_template', 'box');
+                fileData.append('_captcha', 'false');
+                fileData.append('Company', getVal('company_name'));
+                fileData.append('Email', getVal('email'));
+                fileData.append('Message', 'Attached documents for supplier registration of ' + getVal('company_name'));
+                uploadedFiles.forEach(f => {
+                    fileData.append('attachment', f.file, f.label + '_' + f.file.name);
                 });
-                await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fileData });
-
-                // Send remaining files if more than 3
-                if (uploadedFiles.length > 3) {
-                    const fileData2 = new FormData();
-                    fileData2.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
-                    fileData2.append('subject', 'Attachments (Part 2) - ' + (getVal('company_name') || 'Supplier Registration'));
-                    fileData2.append('from_name', 'FGT Supplier Registration');
-                    fileData2.append('message', 'Additional document attachments for ' + getVal('company_name'));
-                    uploadedFiles.slice(3, 6).forEach(f => {
-                        fileData2.append('attachment', f.file);
+                try {
+                    await fetch('https://formsubmit.co/ajax/buyer@futuregatetrading.com', {
+                        method: 'POST',
+                        body: fileData
                     });
-                    await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fileData2 });
+                } catch (e) {
+                    console.log('File upload note: files may need to be sent separately via email');
                 }
             }
 
