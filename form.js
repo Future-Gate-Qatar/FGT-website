@@ -45,7 +45,9 @@ prevBtn.addEventListener('click', () => {
     }
 });
 
-// Form submission via Web3Forms
+// Form submission via Azure Function + SendGrid
+const FORM_API_URL = 'https://fgt-form-handler.azurewebsites.net/api/submitform';
+
 document.getElementById('supplierForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
@@ -60,107 +62,56 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     };
 
     const products = Array.from(form.querySelectorAll('input[name="products[]"]:checked')).map(c => c.value).join(', ');
-    const otherProducts = getVal('products_other');
 
-    // Collect file info
+    // Build FormData with all fields and files
+    const formData = new FormData();
+
+    // Corporate Info
+    const textFields = [
+        'company_name', 'po_box', 'phone', 'email', 'web',
+        'address1', 'address2', 'city', 'state', 'country',
+        'owner_name', 'mobile', 'contact_person', 'title',
+        'contact_phone', 'contact_email',
+        // Bank Details
+        'bank_name', 'bank_address', 'bank_branch', 'account_name',
+        'account_number', 'account_currency', 'swift_code', 'iban',
+        'bank_contact_phone', 'finance_email',
+        // Registration Documents
+        'cr_no', 'cr_expiry', 'eid_no', 'eid_expiry',
+        'tax_no', 'tax_expiry', 'license_no', 'license_expiry',
+        // Submission
+        'submission_date', 'submission_time',
+        // Other
+        'products_other'
+    ];
+
+    textFields.forEach(name => {
+        const val = getVal(name);
+        if (val) formData.append(name, val);
+    });
+
+    // Products (combined into single field)
+    formData.append('products', products || 'None selected');
+
+    // File uploads
     const fileInputNames = ['cr_file', 'eid_file', 'license_file', 'tax_file', 'bank_file', 'qid_file'];
-    const fileLabels = ['CR', 'EID', 'Commercial License', 'Tax Card', 'Bank Details', 'QID Copy'];
-    const uploadedFiles = [];
+    const fileLabels = ['CR', 'EID', 'Commercial_License', 'Tax_Card', 'Bank_Details', 'QID_Copy'];
     fileInputNames.forEach((name, i) => {
         const input = form.querySelector(`[name="${name}"]`);
         if (input && input.files.length > 0) {
-            uploadedFiles.push({ label: fileLabels[i], file: input.files[0] });
+            formData.append(name, input.files[0], fileLabels[i] + '_' + input.files[0].name);
         }
     });
 
-    // Build clean JSON — only these fields appear in email
-    const payload = {
-        access_key: '98a0e564-0085-4474-ab7c-a1f7999a2c14',
-        subject: 'New Supplier Registration - ' + (getVal('company_name') || 'Unknown'),
-        from_name: 'FGT Supplier Registration',
-        replyto: getVal('email') || 'buyer@futuregatetrading.com',
-
-        '--- CORPORATE INFO ---': '―――――――――――――――',
-        'Company Name': getVal('company_name'),
-        'P.O. Box': getVal('po_box'),
-        'Phone': getVal('phone'),
-        'Email': getVal('email'),
-        'Website': getVal('web'),
-        'Address': [getVal('address1'), getVal('address2'), getVal('city'), getVal('state'), getVal('country')].filter(Boolean).join(', '),
-        'Owner Name': getVal('owner_name'),
-        'Mobile': getVal('mobile'),
-        'Contact Person': getVal('contact_person') + (getVal('title') ? ' (' + getVal('title') + ')' : ''),
-        'Contact Phone': getVal('contact_phone'),
-        'Contact Email': getVal('contact_email'),
-
-        '--- PRODUCTS / SERVICES ---': '―――――――――――――――',
-        'Products': products || 'None selected',
-        'Other Products': otherProducts || 'N/A',
-
-        '--- BANK DETAILS ---': '―――――――――――――――',
-        'Bank Name': getVal('bank_name'),
-        'Bank Branch': getVal('bank_branch'),
-        'Account Name': getVal('account_name'),
-        'Account Number': getVal('account_number'),
-        'Account Currency': getVal('account_currency'),
-        'SWIFT / BIC Code': getVal('swift_code'),
-        'IBAN': getVal('iban'),
-        'Finance Email': getVal('finance_email'),
-
-        '--- REGISTRATION DOCUMENTS ---': '―――――――――――――――',
-        'CR No.': getVal('cr_no') + ' (Expires: ' + getVal('cr_expiry') + ')',
-        'EID No.': getVal('eid_no') + ' (Expires: ' + getVal('eid_expiry') + ')',
-        'Tax Card No.': getVal('tax_no') + ' (Expires: ' + getVal('tax_expiry') + ')',
-        'Commercial License': getVal('license_no') + ' (Expires: ' + getVal('license_expiry') + ')',
-
-        '--- SUBMISSION ---': '―――――――――――――――',
-        'Date': getVal('submission_date'),
-        'Time': getVal('submission_time'),
-        'Signature': 'Signed digitally',
-        'Uploaded Documents': uploadedFiles.map(f => f.label + ': ' + f.file.name).join(', ') || 'None'
-    };
-
-    // Remove empty values
-    for (const key in payload) {
-        if (!payload[key] || payload[key] === ' ()' || payload[key] === ' (Expires: )') {
-            delete payload[key];
-        }
-    }
-
     try {
-        // First send the form data as JSON for clean email
-        const response = await fetch('https://api.web3forms.com/submit', {
+        const response = await fetch(FORM_API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData
         });
 
         const result = await response.json();
-        console.log('Web3Forms response:', result);
 
         if (result.success) {
-            // Send files via Formsubmit.co (supports attachments natively)
-            if (uploadedFiles.length > 0) {
-                const fileData = new FormData();
-                fileData.append('_subject', 'Document Attachments - ' + getVal('company_name'));
-                fileData.append('_template', 'box');
-                fileData.append('_captcha', 'false');
-                fileData.append('Company', getVal('company_name'));
-                fileData.append('Email', getVal('email'));
-                fileData.append('Message', 'Attached documents for supplier registration of ' + getVal('company_name'));
-                uploadedFiles.forEach(f => {
-                    fileData.append('attachment', f.file, f.label + '_' + f.file.name);
-                });
-                try {
-                    await fetch('https://formsubmit.co/ajax/buyer@futuregatetrading.com', {
-                        method: 'POST',
-                        body: fileData
-                    });
-                } catch (e) {
-                    console.log('File upload note: files may need to be sent separately via email');
-                }
-            }
-
             alert('Thank you! Your supplier registration has been submitted successfully. We will review your application and contact you soon.');
             form.reset();
             const canvas = document.getElementById('signatureCanvas');
@@ -171,7 +122,7 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
             showPage(1);
         } else {
             alert('Error: ' + (result.message || 'Unknown error. Please contact buyer@futuregatetrading.com'));
-            console.error('Web3Forms error:', result);
+            console.error('Submission error:', result);
         }
     } catch (error) {
         console.error('Fetch error:', error);
