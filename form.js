@@ -96,19 +96,23 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
         });
 
         const result = await response.json();
+        console.log('Web3Forms response:', result);
 
         if (result.success) {
             alert('Thank you! Your supplier registration has been submitted successfully. We will review your application and contact you soon.');
             form.reset();
+            const canvas = document.getElementById('signatureCanvas');
             if (canvas) {
                 canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             }
             currentPage = 1;
             showPage(1);
         } else {
-            alert('There was an error submitting the form. Please try again or contact us directly at buyer@futuregatetrading.com');
+            alert('Error: ' + (result.message || 'Unknown error. Please contact buyer@futuregatetrading.com'));
+            console.error('Web3Forms error:', result);
         }
     } catch (error) {
+        console.error('Fetch error:', error);
         alert('There was an error submitting the form. Please try again or contact us directly at buyer@futuregatetrading.com');
     }
 
