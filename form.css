@@ -1,0 +1,251 @@
+/* =============================================
+   Supplier Registration Form Styles
+   ============================================= */
+
+.form-section {
+    padding: 100px 30px 60px;
+    background: #f4f6f8;
+    min-height: 100vh;
+}
+
+.form-container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 40px 45px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+}
+
+.form-container h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #006AA6;
+    margin-bottom: 30px;
+}
+
+/* Progress Steps */
+.form-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 35px;
+    gap: 5px;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #999;
+    border-bottom: 3px solid #ddd;
+    transition: all 0.3s;
+}
+
+.step span {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.step.active {
+    color: #006AA6;
+    border-bottom-color: #006AA6;
+}
+
+.step.completed {
+    color: #28a745;
+    border-bottom-color: #28a745;
+}
+
+/* Form Pages */
+.form-page {
+    display: none;
+}
+
+.form-page.active {
+    display: block;
+}
+
+.form-page h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.form-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 14px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+    transition: border-color 0.3s;
+    background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #006AA6;
+    box-shadow: 0 0 0 3px rgba(0, 106, 166, 0.1);
+}
+
+.form-group input[type="file"] {
+    padding: 8px;
+    background: #f9fafb;
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #444;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-top: 4px;
+    accent-color: #006AA6;
+}
+
+/* Signature Canvas */
+#signatureCanvas {
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    cursor: crosshair;
+    background: #fafafa;
+    max-width: 100%;
+}
+
+.clear-sig {
+    margin-top: 8px;
+    padding: 6px 16px;
+    background: none;
+    border: 1px solid #d0d5dd;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.clear-sig:hover {
+    background: #f0f0f0;
+}
+
+/* Form Navigation */
+.form-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.form-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.form-btn.next,
+.form-btn.submit {
+    background: #006AA6;
+    color: #fff;
+    margin-left: auto;
+}
+
+.form-btn.next:hover,
+.form-btn.submit:hover {
+    background: #005080;
+}
+
+.form-btn.prev {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.form-btn.prev:hover {
+    background: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 25px 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-steps {
+        flex-wrap: wrap;
+    }
+
+    .step {
+        flex: 0 0 30%;
+        font-size: 0.65rem;
+    }
+}

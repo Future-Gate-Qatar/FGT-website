@@ -389,31 +389,40 @@ img {
     background: #fff;
 }
 
-.clients-grid {
+.clients-slider-wrapper {
     max-width: 1000px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 30px;
+    position: relative;
+    display: flex;
     align-items: center;
+    gap: 15px;
+}
+
+.clients-slider {
+    overflow: hidden;
+    flex: 1;
+}
+
+.clients-track {
+    display: flex;
+    gap: 25px;
+    transition: transform 0.5s ease;
 }
 
 .client-logo {
+    flex: 0 0 160px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 15px;
     background: #f9f9f9;
     border-radius: 6px;
-    transition: box-shadow 0.3s;
-}
-
-.client-logo:hover {
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    height: 90px;
 }
 
 .client-logo img {
-    max-height: 60px;
+    max-height: 55px;
+    max-width: 130px;
     width: auto;
     object-fit: contain;
     filter: grayscale(30%);
@@ -422,6 +431,26 @@ img {
 
 .client-logo:hover img {
     filter: grayscale(0%);
+}
+
+.clients-arrow {
+    background: #006AA6;
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.clients-arrow:hover {
+    background: #005080;
 }
 
 /* =============================================

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Registration - Future Gate Trading</title>
+    <link rel="icon" type="image/png" href="images/FGT-2024-Vector-white.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar scrolled">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/FGT-2024-Vector-white.png" alt="Future Gate Trading">
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#contact">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="form-container">
+            <h1>Supplier Registration Form</h1>
+
+            <!-- Progress Steps -->
+            <div class="form-steps">
+                <div class="step active" data-step="1"><span>1</span> Corporate Info</div>
+                <div class="step" data-step="2"><span>2</span> Products</div>
+                <div class="step" data-step="3"><span>3</span> Bank Details</div>
+                <div class="step" data-step="4"><span>4</span> Documents</div>
+                <div class="step" data-step="5"><span>5</span> Uploads</div>
+                <div class="step" data-step="6"><span>6</span> Submit</div>
+            </div>
+
+            <form id="supplierForm" novalidate>
+
+                <!-- Page 1: Corporate Information -->
+                <div class="form-page active" data-page="1">
+                    <h2>Corporate Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name *</label>
+                            <input type="text" name="company_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>P.O. Box No. *</label>
+                            <input type="text" name="po_box" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone No. *</label>
+                            <input type="tel" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Web</label>
+                            <input type="url" name="web">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Address Line 1</label>
+                            <input type="text" name="address1">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Address Line 2</label>
+                            <input type="text" name="address2">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label>State / Province / Region</label>
+                            <input type="text" name="state">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Country</label>
+                            <select name="country">
+                                <option value="">Select Country</option>
+                                <option value="QA">Qatar</option>
+                                <option value="AE">United Arab Emirates</option>
+                                <option value="SA">Saudi Arabia</option>
+                                <option value="KW">Kuwait</option>
+                                <option value="BH">Bahrain</option>
+                                <option value="OM">Oman</option>
+                                <option value="IN">India</option>
+                                <option value="PK">Pakistan</option>
+                                <option value="CN">China</option>
+                                <option value="US">United States</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="IT">Italy</option>
+                                <option value="TR">Turkey</option>
+                                <option value="EG">Egypt</option>
+                                <option value="JO">Jordan</option>
+                                <option value="LB">Lebanon</option>
+                                <option value="SY">Syria</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Owner Name *</label>
+                            <input type="text" name="owner_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile *</label>
+                            <input type="tel" name="mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person *</label>
+                            <input type="text" name="contact_person" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person Phone No. *</label>
+                            <input type="tel" name="contact_phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person Email *</label>
+                            <input type="email" name="contact_email" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2: Product-Service Information -->
+                <div class="form-page" data-page="2">
+                    <h2>Product - Service Information</h2>
+                    <p class="form-note">Select the products/services you provide *</p>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="tools"> Tools and Equipment</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="building"> Building Materials</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="uniforms"> Uniforms and Safety Wear</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="stationery"> Stationery</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="cleaning"> Cleaning</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="disposable"> Disposable</label>
+                        <label class="checkbox-item"><input type="checkbox" name="products[]" value="others"> Others</label>
+                    </div>
+                    <div class="form-group full-width" style="margin-top: 20px;">
+                        <label>If others, please specify</label>
+                        <textarea name="products_other" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- Page 3: Bank Details -->
+                <div class="form-page" data-page="3">
+                    <h2>Bank Details</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" name="bank_name">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" name="bank_address">
+                        </div>
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <input type="text" name="bank_branch">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Name</label>
+                            <input type="text" name="account_name">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input type="text" name="account_number">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Currency</label>
+                            <input type="text" name="account_currency">
+                        </div>
+                        <div class="form-group">
+                            <label>SWIFT/BIC Code</label>
+                            <input type="text" name="swift_code">
+                        </div>
+                        <div class="form-group">
+                            <label>IBAN No.</label>
+                            <input type="text" name="iban">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person Phone No. *</label>
+                            <input type="tel" name="bank_contact_phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Finance Department Email *</label>
+                            <input type="email" name="finance_email" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 4: Registration Documents -->
+                <div class="form-page" data-page="4">
+                    <h2>Registration Documents</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>CR No. *</label>
+                            <input type="text" name="cr_no" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CR Expiry Date *</label>
+                            <input type="date" name="cr_expiry" required>
+                        </div>
+                        <div class="form-group">
+                            <label>EID No. *</label>
+                            <input type="text" name="eid_no" required>
+                        </div>
+                        <div class="form-group">
+                            <label>EID Expiry Date *</label>
+                            <input type="date" name="eid_expiry" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tax Card No. *</label>
+                            <input type="text" name="tax_no" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tax Card Expiry Date *</label>
+                            <input type="date" name="tax_expiry" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Commercial License *</label>
+                            <input type="text" name="license_no" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Commercial License Expiry Date *</label>
+                            <input type="date" name="license_expiry" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 5: Document Uploads -->
+                <div class="form-page" data-page="5">
+                    <h2>Document Uploads</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>CR *</label>
+                            <input type="file" name="cr_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label>EID *</label>
+                            <input type="file" name="eid_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Commercial License *</label>
+                            <input type="file" name="license_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tax Card *</label>
+                            <input type="file" name="tax_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Details *</label>
+                            <input type="file" name="bank_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Authorized QID Copy *</label>
+                            <input type="file" name="qid_file" accept=".pdf,.jpg,.png" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 6: Final Submission -->
+                <div class="form-page" data-page="6">
+                    <h2>Final Submission</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Date *</label>
+                            <input type="date" name="submission_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" name="submission_time">
+                        </div>
+                    </div>
+                    <div class="form-group full-width" style="margin-top: 20px;">
+                        <label>Signature *</label>
+                        <canvas id="signatureCanvas" width="500" height="150"></canvas>
+                        <button type="button" class="clear-sig" id="clearSignature">Clear Signature</button>
+                    </div>
+                    <div class="form-group full-width" style="margin-top: 20px;">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="confirm" required>
+                            By signing this form you confirm that all the information provided is accurate and complete.
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="form-nav">
+                    <button type="button" class="form-btn prev" id="prevBtn" style="display:none;">
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="form-btn next" id="nextBtn">
+                        Next <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button type="submit" class="form-btn submit" id="submitBtn" style="display:none;">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Future Gate Trading &amp; Contracting. All rights reserved.</p>
+    </footer>
+
+    <script src="form.js"></script>
+</body>
+</html>

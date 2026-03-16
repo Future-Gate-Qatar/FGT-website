@@ -27,10 +27,8 @@
             </button>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#clients">Clients</a></li>
                 <li><a href="#contact">Contact Us</a></li>
+                <li><a href="supplier-registration-form.html">Supplier Registration</a></li>
             </ul>
         </div>
     </nav>
@@ -45,19 +43,19 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>SOLUTION FOR EVERY INDUSTRY</h1>
-            <a href="#contact" class="hero-btn">Supplier Registration</a>
+            <a href="supplier-registration-form.html" class="hero-btn">Supplier Registration</a>
         </div>
     </section>
 
     <!-- Who Are We -->
     <section class="about" id="about">
         <div class="about-container">
-            <div class="about-image">
-                <img src="images/image-20.png" alt="Future Gate Trading">
-            </div>
             <div class="about-text">
                 <h2>Who Are We</h2>
                 <p>Future Gate Trading &amp; Contracting LLC is one of Future Gate Group's companies Established in 2009, We are a Qatari joint venture company. With more than 20 years of combined experience in Qatar, our mission is to provide reliable, expert assistance in metal sheet supply, brass, and stainless-steel forming, tools supply, uniforms and safety ware to contracting companies in the State of Qatar.</p>
+            </div>
+            <div class="about-image">
+                <img src="images/image-20.png" alt="Future Gate Trading">
             </div>
         </div>
     </section>
@@ -136,22 +134,28 @@
     <!-- Clients -->
     <section class="clients" id="clients">
         <h2 class="section-title">Our Clients</h2>
-        <div class="clients-grid">
-            <div class="client-logo"><img src="images/boeinglogof.jpg" alt="Boeing"></div>
-            <div class="client-logo"><img src="images/image-16.png" alt="Client"></div>
-            <div class="client-logo"><img src="images/image-17-300x110.png" alt="Client"></div>
-            <div class="client-logo"><img src="images/image-19-e1666689209390.png" alt="Client"></div>
-            <div class="client-logo"><img src="images/image-15-e1666689225768.png" alt="Client"></div>
-            <div class="client-logo"><img src="images/awqaflogo.jpg" alt="Awqaf"></div>
-            <div class="client-logo"><img src="images/lumatronlogo.jpg" alt="Lumatron"></div>
-            <div class="client-logo"><img src="images/uniquelogo.png" alt="Unique"></div>
-            <div class="client-logo"><img src="images/plclogo.png" alt="PLC"></div>
-            <div class="client-logo"><img src="images/lacigallelogo.png" alt="La Cigalle"></div>
-            <div class="client-logo"><img src="images/nexuslogo.png" alt="Nexus"></div>
-            <div class="client-logo"><img src="images/arabteclogo.png" alt="Arabtec"></div>
-            <div class="client-logo"><img src="images/aljaberlogo.png" alt="AlJaber"></div>
-            <div class="client-logo"><img src="images/qflogo.png" alt="Qatar Foundation"></div>
-            <div class="client-logo"><img src="images/globallogo.png" alt="Global"></div>
+        <div class="clients-slider-wrapper">
+            <button class="clients-arrow clients-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="clients-slider" id="clientsSlider">
+                <div class="clients-track" id="clientsTrack">
+                    <div class="client-logo"><img src="images/boeinglogof.jpg" alt="Boeing"></div>
+                    <div class="client-logo"><img src="images/image-16.png" alt="Client"></div>
+                    <div class="client-logo"><img src="images/image-17-300x110.png" alt="Client"></div>
+                    <div class="client-logo"><img src="images/image-19-e1666689209390.png" alt="Client"></div>
+                    <div class="client-logo"><img src="images/image-15-e1666689225768.png" alt="Client"></div>
+                    <div class="client-logo"><img src="images/awqaflogo.jpg" alt="Awqaf"></div>
+                    <div class="client-logo"><img src="images/lumatronlogo.jpg" alt="Lumatron"></div>
+                    <div class="client-logo"><img src="images/uniquelogo.png" alt="Unique"></div>
+                    <div class="client-logo"><img src="images/plclogo.png" alt="PLC"></div>
+                    <div class="client-logo"><img src="images/lacigallelogo.png" alt="La Cigalle"></div>
+                    <div class="client-logo"><img src="images/nexuslogo.png" alt="Nexus"></div>
+                    <div class="client-logo"><img src="images/arabteclogo.png" alt="Arabtec"></div>
+                    <div class="client-logo"><img src="images/aljaberlogo.png" alt="AlJaber"></div>
+                    <div class="client-logo"><img src="images/qflogo.png" alt="Qatar Foundation"></div>
+                    <div class="client-logo"><img src="images/globallogo.png" alt="Global"></div>
+                </div>
+            </div>
+            <button class="clients-arrow clients-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
     </section>
 
@@ -162,7 +166,7 @@
                 <h2>Contact Us</h2>
                 <div class="contact-item">
                     <i class="fa-solid fa-location-dot"></i>
-                    <p>P.O. Box 22796, Doha, Qatar</p>
+                    <p>Al Aqaria Tower, 11th Floor<br>Al Muthaf St, Doha, Qatar</p>
                 </div>
                 <div class="contact-item">
                     <i class="fa-solid fa-envelope"></i>
