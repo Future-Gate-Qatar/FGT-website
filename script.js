@@ -56,32 +56,18 @@ cookieDecline.addEventListener('click', () => {
     cookieOverlay.style.display = 'none';
 });
 
-// Clients Slider
-const track = document.getElementById('clientsTrack');
-const prevArrow = document.querySelector('.clients-prev');
-const nextArrow = document.querySelector('.clients-next');
-let clientPos = 0;
-const logoWidth = 185; // 160px + 25px gap
-const visibleCount = Math.floor(document.getElementById('clientsSlider').offsetWidth / logoWidth);
-const totalLogos = track.children.length;
-const maxPos = totalLogos - visibleCount;
+// Clients Vertical Slider — show one at a time
+const clientLogos = document.querySelectorAll('.client-logo');
+let visibleClient = 0;
 
-function updateSlider() {
-    track.style.transform = `translateX(-${clientPos * logoWidth}px)`;
+function showClient(index) {
+    clientLogos.forEach(l => l.classList.remove('visible'));
+    clientLogos[index].classList.add('visible');
 }
 
-nextArrow.addEventListener('click', () => {
-    clientPos = clientPos >= maxPos ? 0 : clientPos + 1;
-    updateSlider();
-});
+showClient(0);
 
-prevArrow.addEventListener('click', () => {
-    clientPos = clientPos <= 0 ? maxPos : clientPos - 1;
-    updateSlider();
-});
-
-// Auto-scroll clients
 setInterval(() => {
-    clientPos = clientPos >= maxPos ? 0 : clientPos + 1;
-    updateSlider();
-}, 3000);
+    visibleClient = (visibleClient + 1) % clientLogos.length;
+    showClient(visibleClient);
+}, 2500);
