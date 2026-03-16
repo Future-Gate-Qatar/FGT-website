@@ -52,7 +52,6 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     submitBtn.textContent = 'Submitting...';
 
     const form = e.target;
-    const formData = new FormData();
 
     // Helper
     const getVal = (name) => {
@@ -60,91 +59,112 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
         return el ? el.value : '';
     };
 
-    // Web3Forms config
-    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
-    formData.append('subject', 'New Supplier Registration - ' + (getVal('company_name') || 'FGT'));
-    formData.append('from_name', 'FGT Supplier Registration');
-    formData.append('replyto', getVal('email') || 'buyer@futuregatetrading.com');
-
-    // Build formatted HTML message
     const products = Array.from(form.querySelectorAll('input[name="products[]"]:checked')).map(c => c.value).join(', ');
     const otherProducts = getVal('products_other');
 
-    const message = `
-<h2>Corporate Information</h2>
-<table style="border-collapse:collapse;width:100%">
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Company Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('company_name')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">P.O. Box</td><td style="padding:8px;border:1px solid #ddd">${getVal('po_box')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Phone</td><td style="padding:8px;border:1px solid #ddd">${getVal('phone')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('email')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Website</td><td style="padding:8px;border:1px solid #ddd">${getVal('web')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Address</td><td style="padding:8px;border:1px solid #ddd">${getVal('address1')} ${getVal('address2')}, ${getVal('city')}, ${getVal('state')}, ${getVal('country')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Owner Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('owner_name')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Mobile</td><td style="padding:8px;border:1px solid #ddd">${getVal('mobile')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Person</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_person')} (${getVal('title')})</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Phone</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_phone')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_email')}</td></tr>
-</table>
-
-<h2>Products / Services</h2>
-<p>${products}${otherProducts ? ' | Other: ' + otherProducts : ''}</p>
-
-<h2>Bank Details</h2>
-<table style="border-collapse:collapse;width:100%">
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Bank Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('bank_name')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Branch</td><td style="padding:8px;border:1px solid #ddd">${getVal('bank_branch')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Account Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_name')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Account Number</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_number')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Currency</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_currency')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">SWIFT/BIC</td><td style="padding:8px;border:1px solid #ddd">${getVal('swift_code')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">IBAN</td><td style="padding:8px;border:1px solid #ddd">${getVal('iban')}</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Finance Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('finance_email')}</td></tr>
-</table>
-
-<h2>Registration Documents</h2>
-<table style="border-collapse:collapse;width:100%">
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">CR No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('cr_no')} (Expires: ${getVal('cr_expiry')})</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">EID No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('eid_no')} (Expires: ${getVal('eid_expiry')})</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Tax Card No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('tax_no')} (Expires: ${getVal('tax_expiry')})</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Commercial License</td><td style="padding:8px;border:1px solid #ddd">${getVal('license_no')} (Expires: ${getVal('license_expiry')})</td></tr>
-</table>
-
-<p><strong>Submission Date:</strong> ${getVal('submission_date')} ${getVal('submission_time')}</p>
-<p><strong>Signature:</strong> Signed digitally</p>
-`;
-
-    formData.append('message', message);
-
-    // File attachments — Web3Forms supports max 3 files with name "attachment"
-    const fileNames = ['cr_file', 'eid_file', 'license_file', 'tax_file', 'bank_file', 'qid_file'];
-    let fileCount = 0;
-    const skippedFiles = [];
-    fileNames.forEach(name => {
+    // Collect file info
+    const fileInputNames = ['cr_file', 'eid_file', 'license_file', 'tax_file', 'bank_file', 'qid_file'];
+    const fileLabels = ['CR', 'EID', 'Commercial License', 'Tax Card', 'Bank Details', 'QID Copy'];
+    const uploadedFiles = [];
+    fileInputNames.forEach((name, i) => {
         const input = form.querySelector(`[name="${name}"]`);
         if (input && input.files.length > 0) {
-            if (fileCount < 3) {
-                formData.append('attachment', input.files[0]);
-                fileCount++;
-            } else {
-                skippedFiles.push(input.files[0].name);
-            }
+            uploadedFiles.push({ label: fileLabels[i], file: input.files[0] });
         }
     });
 
-    if (skippedFiles.length > 0) {
-        formData.append('Note', 'Additional files not attached (3 file limit): ' + skippedFiles.join(', ') + '. Please request these via email.');
+    // Build clean JSON — only these fields appear in email
+    const payload = {
+        access_key: '98a0e564-0085-4474-ab7c-a1f7999a2c14',
+        subject: 'New Supplier Registration - ' + (getVal('company_name') || 'Unknown'),
+        from_name: 'FGT Supplier Registration',
+        replyto: getVal('email') || 'buyer@futuregatetrading.com',
+
+        '--- CORPORATE INFO ---': '―――――――――――――――',
+        'Company Name': getVal('company_name'),
+        'P.O. Box': getVal('po_box'),
+        'Phone': getVal('phone'),
+        'Email': getVal('email'),
+        'Website': getVal('web'),
+        'Address': [getVal('address1'), getVal('address2'), getVal('city'), getVal('state'), getVal('country')].filter(Boolean).join(', '),
+        'Owner Name': getVal('owner_name'),
+        'Mobile': getVal('mobile'),
+        'Contact Person': getVal('contact_person') + (getVal('title') ? ' (' + getVal('title') + ')' : ''),
+        'Contact Phone': getVal('contact_phone'),
+        'Contact Email': getVal('contact_email'),
+
+        '--- PRODUCTS / SERVICES ---': '―――――――――――――――',
+        'Products': products || 'None selected',
+        'Other Products': otherProducts || 'N/A',
+
+        '--- BANK DETAILS ---': '―――――――――――――――',
+        'Bank Name': getVal('bank_name'),
+        'Bank Branch': getVal('bank_branch'),
+        'Account Name': getVal('account_name'),
+        'Account Number': getVal('account_number'),
+        'Account Currency': getVal('account_currency'),
+        'SWIFT / BIC Code': getVal('swift_code'),
+        'IBAN': getVal('iban'),
+        'Finance Email': getVal('finance_email'),
+
+        '--- REGISTRATION DOCUMENTS ---': '―――――――――――――――',
+        'CR No.': getVal('cr_no') + ' (Expires: ' + getVal('cr_expiry') + ')',
+        'EID No.': getVal('eid_no') + ' (Expires: ' + getVal('eid_expiry') + ')',
+        'Tax Card No.': getVal('tax_no') + ' (Expires: ' + getVal('tax_expiry') + ')',
+        'Commercial License': getVal('license_no') + ' (Expires: ' + getVal('license_expiry') + ')',
+
+        '--- SUBMISSION ---': '―――――――――――――――',
+        'Date': getVal('submission_date'),
+        'Time': getVal('submission_time'),
+        'Signature': 'Signed digitally',
+        'Uploaded Documents': uploadedFiles.map(f => f.label + ': ' + f.file.name).join(', ') || 'None'
+    };
+
+    // Remove empty values
+    for (const key in payload) {
+        if (!payload[key] || payload[key] === ' ()' || payload[key] === ' (Expires: )') {
+            delete payload[key];
+        }
     }
 
     try {
+        // First send the form data as JSON for clean email
         const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
         const result = await response.json();
         console.log('Web3Forms response:', result);
 
         if (result.success) {
+            // Send files as a second request if any exist
+            if (uploadedFiles.length > 0) {
+                const fileData = new FormData();
+                fileData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
+                fileData.append('subject', 'Attachments - ' + (getVal('company_name') || 'Supplier Registration'));
+                fileData.append('from_name', 'FGT Supplier Registration');
+                fileData.append('message', 'Document attachments for ' + getVal('company_name') + ' (' + getVal('email') + ')');
+                uploadedFiles.slice(0, 3).forEach(f => {
+                    fileData.append('attachment', f.file);
+                });
+                await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fileData });
+
+                // Send remaining files if more than 3
+                if (uploadedFiles.length > 3) {
+                    const fileData2 = new FormData();
+                    fileData2.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
+                    fileData2.append('subject', 'Attachments (Part 2) - ' + (getVal('company_name') || 'Supplier Registration'));
+                    fileData2.append('from_name', 'FGT Supplier Registration');
+                    fileData2.append('message', 'Additional document attachments for ' + getVal('company_name'));
+                    uploadedFiles.slice(3, 6).forEach(f => {
+                        fileData2.append('attachment', f.file);
+                    });
+                    await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fileData2 });
+                }
+            }
+
             alert('Thank you! Your supplier registration has been submitted successfully. We will review your application and contact you soon.');
             form.reset();
             const canvas = document.getElementById('signatureCanvas');
