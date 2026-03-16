@@ -54,16 +54,24 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     const form = e.target;
     const formData = new FormData(form);
 
-    // Add Web3Forms access key
-    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
-    formData.append('subject', 'New Supplier Registration Form Submission');
-    formData.append('from_name', 'FGT Supplier Registration');
+    // Remove file inputs - Web3Forms free plan has size limits
+    // Instead, collect file names for reference
+    const fileInputs = form.querySelectorAll('input[type="file"]');
+    const fileNames = [];
+    fileInputs.forEach(input => {
+        if (input.files.length > 0) {
+            fileNames.push(`${input.name}: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)}KB)`);
+        }
+        formData.delete(input.name);
+    });
+    if (fileNames.length > 0) {
+        formData.append('Uploaded Documents', fileNames.join('\n'));
+    }
 
-    // Add signature as image
+    // Add signature note
     const canvas = document.getElementById('signatureCanvas');
     if (canvas) {
-        const signatureData = canvas.toDataURL('image/png');
-        formData.append('Signature', signatureData);
+        formData.append('Signature', 'Signed digitally');
     }
 
     try {
