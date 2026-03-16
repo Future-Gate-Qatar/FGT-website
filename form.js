@@ -55,7 +55,7 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     const formData = new FormData(form);
 
     // Add Web3Forms access key
-    formData.append('access_key', 'YOUR_WEB3FORMS_KEY');
+    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
     formData.append('subject', 'New Supplier Registration Form Submission');
     formData.append('from_name', 'FGT Supplier Registration');
 
