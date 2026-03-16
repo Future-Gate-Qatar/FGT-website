@@ -52,32 +52,47 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     submitBtn.textContent = 'Submitting...';
 
     const form = e.target;
-    const formData = new FormData(form);
 
-    // Remove file inputs - Web3Forms free plan has size limits
-    // Instead, collect file names for reference
+    // Build JSON payload from form fields (skip files)
+    const data = {
+        access_key: '98a0e564-0085-4474-ab7c-a1f7999a2c14',
+        subject: 'New Supplier Registration Form Submission',
+        from_name: 'FGT Supplier Registration'
+    };
+
+    // Collect all text/select/date/email/tel inputs
+    const inputs = form.querySelectorAll('input:not([type="file"]):not([type="checkbox"]):not([type="hidden"]), select, textarea');
+    inputs.forEach(input => {
+        if (input.name && input.value) {
+            data[input.name] = input.value;
+        }
+    });
+
+    // Collect checkboxes
+    const checked = form.querySelectorAll('input[type="checkbox"]:checked');
+    const products = [];
+    checked.forEach(cb => {
+        if (cb.name === 'products[]') products.push(cb.value);
+    });
+    if (products.length > 0) data['Products/Services'] = products.join(', ');
+
+    // Collect file names
     const fileInputs = form.querySelectorAll('input[type="file"]');
     const fileNames = [];
     fileInputs.forEach(input => {
         if (input.files.length > 0) {
-            fileNames.push(`${input.name}: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)}KB)`);
+            fileNames.push(input.files[0].name);
         }
-        formData.delete(input.name);
     });
-    if (fileNames.length > 0) {
-        formData.append('Uploaded Documents', fileNames.join('\n'));
-    }
+    if (fileNames.length > 0) data['Uploaded Documents'] = fileNames.join(', ');
 
-    // Add signature note
-    const canvas = document.getElementById('signatureCanvas');
-    if (canvas) {
-        formData.append('Signature', 'Signed digitally');
-    }
+    data['Signature'] = 'Signed digitally';
 
     try {
         const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
 
         const result = await response.json();
