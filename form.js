@@ -59,83 +59,79 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     formData.append('subject', 'New Supplier Registration - FGT');
     formData.append('from_name', 'FGT Supplier Registration');
 
-    // Corporate Info (Page 1)
-    const fields = {
-        'Company Name': 'company_name',
-        'P.O. Box': 'po_box',
-        'Phone': 'phone',
-        'Email': 'email',
-        'Website': 'web',
-        'Address Line 1': 'address1',
-        'Address Line 2': 'address2',
-        'City': 'city',
-        'State/Province': 'state',
-        'Country': 'country',
-        'Owner Name': 'owner_name',
-        'Mobile': 'mobile',
-        'Contact Person': 'contact_person',
-        'Title': 'title',
-        'Contact Phone': 'contact_phone',
-        'Contact Email': 'contact_email',
-        // Bank Details (Page 3)
-        'Bank Name': 'bank_name',
-        'Bank Address': 'bank_address',
-        'Branch': 'bank_branch',
-        'Account Name': 'account_name',
-        'Account Number': 'account_number',
-        'Account Currency': 'account_currency',
-        'SWIFT/BIC Code': 'swift_code',
-        'IBAN': 'iban',
-        'Bank Contact Phone': 'bank_contact_phone',
-        'Finance Email': 'finance_email',
-        // Registration Documents (Page 4)
-        'CR No': 'cr_no',
-        'CR Expiry Date': 'cr_expiry',
-        'EID No': 'eid_no',
-        'EID Expiry Date': 'eid_expiry',
-        'Tax Card No': 'tax_no',
-        'Tax Card Expiry Date': 'tax_expiry',
-        'Commercial License': 'license_no',
-        'License Expiry Date': 'license_expiry',
-        // Submission (Page 6)
-        'Submission Date': 'submission_date',
-        'Submission Time': 'submission_time'
+    // Build formatted HTML message
+    const getVal = (name) => {
+        const el = form.querySelector(`[name="${name}"]`);
+        return el ? el.value : '';
     };
 
-    for (const [label, name] of Object.entries(fields)) {
-        const input = form.querySelector(`[name="${name}"]`);
-        if (input && input.value) {
-            formData.append(label, input.value);
-        }
-    }
+    const products = Array.from(form.querySelectorAll('input[name="products[]"]:checked')).map(c => c.value).join(', ');
+    const otherProducts = getVal('products_other');
 
-    // Products (Page 2)
-    const checked = form.querySelectorAll('input[name="products[]"]:checked');
-    if (checked.length > 0) {
-        formData.append('Products/Services', Array.from(checked).map(c => c.value).join(', '));
-    }
-    const otherProducts = form.querySelector('[name="products_other"]');
-    if (otherProducts && otherProducts.value) {
-        formData.append('Other Products', otherProducts.value);
-    }
+    const message = `
+<h2>Corporate Information</h2>
+<table style="border-collapse:collapse;width:100%">
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Company Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('company_name')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">P.O. Box</td><td style="padding:8px;border:1px solid #ddd">${getVal('po_box')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Phone</td><td style="padding:8px;border:1px solid #ddd">${getVal('phone')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('email')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Website</td><td style="padding:8px;border:1px solid #ddd">${getVal('web')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Address</td><td style="padding:8px;border:1px solid #ddd">${getVal('address1')} ${getVal('address2')}, ${getVal('city')}, ${getVal('state')}, ${getVal('country')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Owner Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('owner_name')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Mobile</td><td style="padding:8px;border:1px solid #ddd">${getVal('mobile')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Person</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_person')} (${getVal('title')})</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Phone</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_phone')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Contact Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('contact_email')}</td></tr>
+</table>
 
-    // File attachments (Page 5) - combine into single attachment field
-    const fileMap = {
-        'cr_file': 'CR',
-        'eid_file': 'EID',
-        'license_file': 'Commercial License',
-        'tax_file': 'Tax Card',
-        'bank_file': 'Bank Details',
-        'qid_file': 'QID Copy'
-    };
-    for (const [name, label] of Object.entries(fileMap)) {
+<h2>Products / Services</h2>
+<p>${products}${otherProducts ? ' | Other: ' + otherProducts : ''}</p>
+
+<h2>Bank Details</h2>
+<table style="border-collapse:collapse;width:100%">
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Bank Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('bank_name')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Branch</td><td style="padding:8px;border:1px solid #ddd">${getVal('bank_branch')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Account Name</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_name')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Account Number</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_number')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Currency</td><td style="padding:8px;border:1px solid #ddd">${getVal('account_currency')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">SWIFT/BIC</td><td style="padding:8px;border:1px solid #ddd">${getVal('swift_code')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">IBAN</td><td style="padding:8px;border:1px solid #ddd">${getVal('iban')}</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Finance Email</td><td style="padding:8px;border:1px solid #ddd">${getVal('finance_email')}</td></tr>
+</table>
+
+<h2>Registration Documents</h2>
+<table style="border-collapse:collapse;width:100%">
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">CR No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('cr_no')} (Expires: ${getVal('cr_expiry')})</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">EID No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('eid_no')} (Expires: ${getVal('eid_expiry')})</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Tax Card No.</td><td style="padding:8px;border:1px solid #ddd">${getVal('tax_no')} (Expires: ${getVal('tax_expiry')})</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Commercial License</td><td style="padding:8px;border:1px solid #ddd">${getVal('license_no')} (Expires: ${getVal('license_expiry')})</td></tr>
+</table>
+
+<p><strong>Submission Date:</strong> ${getVal('submission_date')} ${getVal('submission_time')}</p>
+<p><strong>Signature:</strong> Signed digitally</p>
+`;
+
+    formData.append('message', message);
+
+    // File attachments — Web3Forms supports max 3 files with name "attachment"
+    const fileNames = ['cr_file', 'eid_file', 'license_file', 'tax_file', 'bank_file', 'qid_file'];
+    let fileCount = 0;
+    const skippedFiles = [];
+    fileNames.forEach(name => {
         const input = form.querySelector(`[name="${name}"]`);
         if (input && input.files.length > 0) {
-            formData.append(label, input.files[0]);
+            if (fileCount < 3) {
+                formData.append('attachment', input.files[0]);
+                fileCount++;
+            } else {
+                skippedFiles.push(input.files[0].name);
+            }
         }
-    }
+    });
 
-    formData.append('Signature', 'Signed digitally');
+    if (skippedFiles.length > 0) {
+        formData.append('Note', 'Additional files not attached (3 file limit): ' + skippedFiles.join(', ') + '. Please request these via email.');
+    }
 
     try {
         const response = await fetch('https://api.web3forms.com/submit', {
