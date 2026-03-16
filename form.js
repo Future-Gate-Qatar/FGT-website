@@ -45,13 +45,52 @@ prevBtn.addEventListener('click', () => {
     }
 });
 
-// Form submission
-document.getElementById('supplierForm').addEventListener('submit', (e) => {
+// Form submission via Web3Forms
+document.getElementById('supplierForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    alert('Thank you! Your supplier registration has been submitted successfully. We will review your application and contact you soon.');
-    e.target.reset();
-    currentPage = 1;
-    showPage(1);
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    // Add Web3Forms access key
+    formData.append('access_key', 'YOUR_WEB3FORMS_KEY');
+    formData.append('subject', 'New Supplier Registration Form Submission');
+    formData.append('from_name', 'FGT Supplier Registration');
+
+    // Add signature as image
+    const canvas = document.getElementById('signatureCanvas');
+    if (canvas) {
+        const signatureData = canvas.toDataURL('image/png');
+        formData.append('Signature', signatureData);
+    }
+
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Thank you! Your supplier registration has been submitted successfully. We will review your application and contact you soon.');
+            form.reset();
+            if (canvas) {
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            }
+            currentPage = 1;
+            showPage(1);
+        } else {
+            alert('There was an error submitting the form. Please try again or contact us directly at buyer@futuregatetrading.com');
+        }
+    } catch (error) {
+        alert('There was an error submitting the form. Please try again or contact us directly at buyer@futuregatetrading.com');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
 });
 
 // Signature Canvas
