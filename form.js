@@ -54,17 +54,19 @@ document.getElementById('supplierForm').addEventListener('submit', async (e) => 
     const form = e.target;
     const formData = new FormData();
 
-    // Web3Forms config
-    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
-    formData.append('subject', 'New Supplier Registration - FGT');
-    formData.append('from_name', 'FGT Supplier Registration');
-
-    // Build formatted HTML message
+    // Helper
     const getVal = (name) => {
         const el = form.querySelector(`[name="${name}"]`);
         return el ? el.value : '';
     };
 
+    // Web3Forms config
+    formData.append('access_key', '98a0e564-0085-4474-ab7c-a1f7999a2c14');
+    formData.append('subject', 'New Supplier Registration - ' + (getVal('company_name') || 'FGT'));
+    formData.append('from_name', 'FGT Supplier Registration');
+    formData.append('replyto', getVal('email') || 'buyer@futuregatetrading.com');
+
+    // Build formatted HTML message
     const products = Array.from(form.querySelectorAll('input[name="products[]"]:checked')).map(c => c.value).join(', ');
     const otherProducts = getVal('products_other');
 
